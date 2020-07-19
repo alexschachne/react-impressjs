@@ -29,7 +29,7 @@ export default class Impress extends Component {
   constructor(props) {
     super(props);
 
-    const {rootData, hint, hintMessage, fallbackMessage, progress} = props;
+    const {rootData, hint, hintMessage, fallbackMessage, progress, zoomIn} = props;
     const rootStyles = {
       position: 'absolute',
       top: '50%',
@@ -66,6 +66,7 @@ export default class Impress extends Component {
       hintMessage: hintMessage,
       fallbackMessage: fallbackMessage,
       progress: progress,
+      zoomIn: zoomIn,
 
       /** For touch event **/
       startX: 0,
@@ -86,33 +87,33 @@ export default class Impress extends Component {
       this.goto(_activeStep, 500);
 
     // Listener for keyboard event
-    document.addEventListener('keyup', throttle((e) => {
-      if (e.keyCode === 9 ||
-          (e.keyCode >= 32 && e.keyCode <= 40)) {
-        switch (e.keyCode) {
-          case 35: // End
-            this.end();
-            break;
-          case 36: // Home
-            this.home();
-            break;
-          case 33: // Page up
-          case 37: // Left
-          case 38: // Up
-            this.prev();
-            break;
-          case 9:  // Tab
-          case 32: // Space
-          case 34: // Page down
-          case 39: // Right
-          case 40: // Down
-            this.next();
-            break;
-          default:
-            break;
-        }
-      }
-    }, 250), false);
+    // document.addEventListener('keyup', throttle((e) => {
+    //   if (e.keyCode === 9 ||
+    //       (e.keyCode >= 32 && e.keyCode <= 40)) {
+    //     switch (e.keyCode) {
+    //       case 35: // End
+    //         this.end();
+    //         break;
+    //       case 36: // Home
+    //         this.home();
+    //         break;
+    //       case 33: // Page up
+    //       case 37: // Left
+    //       case 38: // Up
+    //         this.prev();
+    //         break;
+    //       case 9:  // Tab
+    //       case 32: // Space
+    //       case 34: // Page down
+    //       case 39: // Right
+    //       case 40: // Down
+    //         this.next();
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    //   }
+    // }, 250), false);
 
     // Window resize
     window.addEventListener('resize', throttle(() => {
@@ -135,11 +136,17 @@ export default class Impress extends Component {
     });
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', function(event) {
-      console.log(event.keyCode);
-    }, false);
+  componentDidUpdate(prevProps){
+    if (prevProps.zoomIn !== this.props.zoomIn){
+      this.next();
+    }
   }
+
+  // componentWillUnmount() {
+  //   document.removeEventListener('keydown', function(event) {
+  //     console.log(event.keyCode);
+  //   }, false);
+  // }
 
   /**
    * Initialize Impress.

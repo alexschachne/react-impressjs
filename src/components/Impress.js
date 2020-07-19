@@ -137,12 +137,16 @@ export default class Impress extends Component {
   }
 
   componentDidUpdate(prevProps){
+    console.log(this.props)
+    console.log(prevProps)
 
     if (prevProps.zoomIn !== this.props.zoomIn){
+      console.log("true")
+
       if (this.props.zoomIn) {
-        this.prev();
+        this.end();
       } else {
-        this.next();
+        this.home();
       }
     }
   }
